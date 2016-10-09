@@ -2,6 +2,7 @@
 /*
  *找零钱
  */
+
 console.log(split(100, 0, 'results:'));
 
 function split(amount, start, result) {

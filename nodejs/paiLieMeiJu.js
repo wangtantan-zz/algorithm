@@ -2,6 +2,7 @@
 /*
  *排列的递归枚举
  */
+
 test('123456');
 console.log('1234567'.substr(1, 2));
 console.log('1234567'.substring(1, 2));

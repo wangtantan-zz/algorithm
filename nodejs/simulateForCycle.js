@@ -1,7 +1,6 @@
+'use strict';
 /*
- *
- *
- *
+ *伪循环
  */
 var arr = [];
 simulateFor(0, 10, (start) => {return (start + 1);});

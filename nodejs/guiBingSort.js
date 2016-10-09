@@ -1,3 +1,12 @@
+'use strict';
+/*
+ *归并排序
+ */
+
+var items = [3, 13, 9, 2, 11, 21, 8, 0];
+var result = mergeSort(items);
+console.log(result);
+
 function　merge(left, right){
   var　result=[];
   while(left.length>0 && right.length>0){
@@ -10,6 +19,7 @@ function　merge(left, right){
   }
   return result.concat(left).concat(right);
 }
+
 function　mergeSort(items){
   if(items.length == 1){
       return　items;
@@ -19,7 +29,3 @@ function　mergeSort(items){
   right = items.slice(middle);
   return　merge(mergeSort(left), mergeSort(right));
 }
-
-var items = [3, 13, 9, 2, 11, 21, 8, 0];
-var result = mergeSort(items);
-console.log(result);
