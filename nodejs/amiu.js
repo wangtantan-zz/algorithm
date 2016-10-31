@@ -4,68 +4,77 @@
 const moment = require('moment');
 const request = require('request');
 const async = require('async');
-
-const appid = 'dcdc435cc4aa11e587bf0242ac1101de';
-const secretKey = 'InsQbm2rXG5z';
+const fs = require('fs');
 
 const host = 'http://hr.amiaodaifu.com:50000/1610';
 
-let result = {};
-let options = { body: { mail: "123123@qq.com", } };
-getRequest(getQuestionUrl(), options, "post", (err, ret) => {
-  getChildren(ret.id, ret.rootId, (err, result) => {
-    console.log(result);
+let urls = {
+  getQuestionUrl: () => { return `${host}/new-question`;},
+  getChildrenUrl: (id, rootId) => {
+    return `${host}/questions/${id}/get-children/${rootId}`;
+  },
+  getCheckUrl: (id) => { return `${host}/questions/${id}/check`;},
+  getSubmitUrl: (id) => { return `${host}/questions/${id}/submit`;},
+};
+let getOptions = { body: { mail: "i@wangtantan.com", } };
+
+postData(urls.getQuestionUrl(), getOptions, (err, ret) => {
+  getChildren(ret.id, ret.rootId, (err, object) => {
+    let str = JSON.stringify(object, null, 4);
+    console.log(str);
+    let postOptions = { body: {root: object}};
+    postData(urls.getCheckUrl(ret.id), postOptions, (err, check) => {
+      console.log(check);
+      readFile((err, sourceCode) => {
+        let submitOptions = {
+          body: {
+            name: "王潭潭",
+            forFun: false,
+            phone: "15821788176",
+            sourceCode,
+          }
+        };
+        postData(urls.getSubmitUrl(ret.id), submitOptions, (err, msg) => {
+          console.log(msg);
+        });
+      });
+    });
   });
 });
 
-function getQuestionUrl() {
-  return `${host}/new-question`;
-};
-function getChildrenUrl(id, rootId) {
-  return `${host}/questions/${id}/get-children/${rootId}`;
-}
-function getSubmitUrl() {
-  return `${host}/questions/${id}/submit`;
-}
-
-
-function getRequest(url, options, method, cb) {
+function postData(url, options, cb) {
   options.json = true;
-  console.log(method, "======", url, options);
-  request[method](url, options, (err, response, body) => {
+  request.post(url, options, (err, response, body) => {
     if (err) return cb(err);
+    console.log(url, "=>", body);
     cb(null, body);
   });
 };
 
-function get(url, id, rootId, cb) {
-  console.log("get: ======", url);
+function getData(url, id, rootId, cb) {
   request.get(url, (err, response, body) => {
-    let ret2 = str2Arr(rootId, body);
-    if (ret2.length == 0) {
-      //cb();
+    let dataArr = JSON.parse(body);
+    if (dataArr.length == 0) {
+      cb(null, []);
     } else {
-      for (let i = 0; i < ret2.length; i++) {
-        getChildren(id, ret2[i], cb);
-      }
+      async.mapLimit(dataArr, 1, function(rootId, _cb) {//控制并发数
+        getChildren(id, rootId, _cb);
+      }, cb);
     }
   });
 };
 
 function getChildren(id, rootId, cb) {
-  let url = getChildrenUrl(id, rootId);
-  console.log(`>>>>>>>>>>>${rootId}`);
-  get(url, id, rootId, cb);
+  let url = urls.getChildrenUrl(id, rootId);
+  getData(url, id, rootId, (err, arr)=> {
+    let obj = {id: rootId, children: arr};
+    cb(null, obj);
+  });
 };
 
-function str2Arr(rootId, str) {
-  let buffer = str.substr(1, str.length-2);
-  //console.log(rootId, "\t\t", str, "\t\t", buffer);
-  result[rootId] = buffer;
-  console.log(result);
-  if (buffer.length == 0) {
-    return [];
-  } else {
-    return buffer.split(",");
-  }
+function readFile(cb) {
+  fs.readFile(__filename, 'utf-8', (err, fs) => {
+    console.log(fs);
+    cb(err, fs);
+  });
 }
