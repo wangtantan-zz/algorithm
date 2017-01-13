@@ -6,8 +6,10 @@ console.log();
 console.log();
 console.log("------------------------ START -------------------------");
 
-let a = [1, 3, 5, 6, 6, 6, 6, 6, 8, 11, 88, 99, 101, 102, 103];
-let b = [1, 6, 7, 12, 89, 100, 991, 2000, 3000];
+//let a = [1, 3, 5, 6, 6, 6, 6, 6, 8, 11, 88, 99, 101, 102, 103];
+//let b = [1, 6, 7, 12, 89, 100, 991, 2000, 3000];
+let a = [1,3,7,9,13];
+let b = [2,14,14,14,14,14,15];
 
 let ia1 = 0,
     ia2 = a.length - 1,
@@ -91,13 +93,14 @@ function fanishM(ia1, ia2, ib1, ib2) {
     console.log("aArray:", a.slice(ia1, ia2+1), "bArray:", b.slice(ib1, ib2+1));
     let num = ia2 - ia1 + 1 + ib2 -ib1 + 1;
     let res0, res1, res2;
+    console.log("****", num/2, "****", parseInt(num/2));
     if (num/2 != parseInt(num/2)) {
         for (let i = 0; i < num/2; i++) {
             res0 = a[ia1] < b[ib1] ? a[ia1++] : b[ib1++];
         }
         return res0;
     } else {
-        for (let i = 0; i < num/2; i++) {
+        for (let i = 0; i <= num/2; i++) {
             res2 = res1;
             res1 = a[ia1] < b[ib1] ? a[ia1++] : b[ib1++];
         }
