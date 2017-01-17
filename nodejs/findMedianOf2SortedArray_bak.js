@@ -4,6 +4,7 @@ console.log("------------------------ START -------------------------");
 
 var nums1 = [1];
 var nums2 = [2, 3, 4, 5, 6];
+debugger
 console.log(run(nums1, nums2));
 
 function run(num1, num2) {
@@ -16,9 +17,10 @@ function run(num1, num2) {
     var ma, mb;
     var times = 0;
 
-    return getM(ia1, ia2, ib1, ib2);
+    //return getM(ia1, ia2, ib1, ib2);
 
-    function getM(ia1, ia2, ib1, ib2) {
+    //function getM(ia1, ia2, ib1, ib2) {
+    while (true) {
         ma = {
             min:    nums1[Math.floor((ia2-ia1)/2)+ia1],
             max:    nums1[Math.ceil((ia2-ia1)/2)+ia1]
@@ -64,7 +66,7 @@ function run(num1, num2) {
             ib2 = Math.ceil((_ib2-_ib1)/2) + _ib1;
         }
 
-        return getM(ia1, ia2, ib1, ib2);
+    //    return getM(ia1, ia2, ib1, ib2);
     }
 
     function fanishM(ia1, ia2, ib1, ib2) {
