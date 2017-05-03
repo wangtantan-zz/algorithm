@@ -1,24 +1,24 @@
 "use strict";
 
-//let inputStr = process.argv[2];
-let inputStr = "abdefdbba";
-let inputL = inputStr.length;
-let subStr = [];
-let maxL = 0;
-let tmpL = 0;
+//let s = process.argv[2];
+var s = "ausfdask";
+//var inputL = s.length;
+//var subStr = [];
+//var maxL = 0;
+//var tmpL = 0;
 
 //console.log(`char\ttmpL\tmaxL\tshift}\tsubStr`);
 //for (let iL = 0; iL < inputL; iL++) {
-//    let uk = checkUnique(subStr, inputStr.charAt(iL));
+//    let uk = checkUnique(subStr, s.charAt(iL));
 //    let ukk = uk;
 //    tmpL = tmpL  - uk;
 //    while (uk != -1) {
 //        subStr.shift();
 //        uk--;
 //    }
-//    subStr.push(inputStr.charAt(iL));
+//    subStr.push(s.charAt(iL));
 //    if (tmpL > maxL) maxL = tmpL;
-//    console.log(`${inputStr.charAt(iL)}\t${tmpL}\t${maxL}\t${ukk}\t${subStr}`);
+//    console.log(`${s.charAt(iL)}\t${tmpL}\t${maxL}\t${ukk}\t${subStr}`);
 //}
 //
 //console.log("Max:\t" + maxL);
@@ -31,17 +31,25 @@ let tmpL = 0;
 //    }
 //    return -1;
 //}
+var s = "oausfdask";
+var charMap = {};
+var i = 0;
+var ie = 0;
+var aChar;
+var tmp = 0;
+var l = s.length; 
+//if (l === 0) return 0;
+var maxL = 0;
 
-let charMap = {};
-
-for (let iL = 0; iL < inputStr.length; iL++) {
-    let aChar = inputStr.charAt(iL);
-    if (charMap[aChar] || charMap[aChar] == 0) {
-        tmpL = iL - charMap[aChar];
-    }
+for (var iL = 0; iL < l; iL++) {
+    aChar = s[iL];
+    ie = charMap[aChar];
+    ie && ie > i ? i = ie : null;
+    tmp = iL -i + 1;
+    maxL = Math.max(tmp, maxL);
     charMap[aChar] = iL;
-    if (tmpL > maxL) maxL = tmpL;
-    console.log(charMap);
+    console.log({i, ie, iL, tmp, maxL, map: charMap});
 }
 
+//return maxL;
 console.log(maxL);

@@ -6,8 +6,10 @@ console.log("------------------------ START -------------------------");
 //var nums2 = [2, 3, 4, 5, 6];
 //var nums1 = [1, 3, 5, 6, 6, 6, 6, 6, 8, 11, 88, 99, 101, 102, 103];
 //var nums2 = [1, 6, 7, 12, 89, 100, 991, 2000, 3000];
-var nums1 = [1, 2];
-var nums2 = [3, 4];
+//var nums1 = [1, 2, 5, 6];
+//var nums2 = [3, 4];
+var nums1 = [3, 4];
+var nums2 = [1, 2, 5];
 console.log(run(nums1, nums2));
 
 function run(nums1, nums2) {
@@ -31,19 +33,38 @@ function run(nums1, nums2) {
     }
     var m = nums1.length;
     var n = nums2.length;
+    if (nums1[m - 1] <= nums2[0]) return getM(nums1, nums2);
+    if (nums2[n - 1] <= nums1[0]) return getM(nums2, nums1);
     var index = 0,
         _index = n - 1,
         _indextmp = parseInt((m + n)/2 - 1 - index),
         indextmp = parseInt((m + n)/2 - 1 - _index);
-    var em;
-    var en;
-    if (nums1[m - 1] <= nums2[0]) return getM(nums1, nums2);
-    if (nums2[n - 1] <= nums1[0]) return getM(nums2, nums1);
+    var em, en;
+    if (nums1[_indextmp + 1]) {
+        em = {min: nums1[_indextmp], max: nums1[_indextmp + 1]};
+        en = {min: nums2[0], max: nums2[1]};
+    } else {
+        em = {min: nums1[_indextmp], max: nums1[_indextmp]};
+        en = {min: nums2[0], max: nums2[1]};
+    }
+    console.log("A:", { em, mi: {indextmp, _indextmp, mN: parseInt((indextmp + _indextmp)/2)}, en, ni: {index, _index, nN: parseInt((index + _index)/2)} });
+    if (em.max >= en.min && en.max >= em.min) {
+        if (em.max >= en.max && em.min >= en.min || em.max <= en.max && em.min <= en.min) {
+            if ((m + n) % 2 == 0) {
+                console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+                console.log({em, en, left: Math.max(em.min, en.min), right: Math.min(em.max, en.max)});
+                return (em.min + en.min) / 2;
+            } else {
+                console.log("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
+                return Math.max(em.min, en.min);
+            }
+        }
+    }
+    var em = {min: nums1[parseInt((indextmp + _indextmp)/2)], max: nums1[parseInt((indextmp + _indextmp)/2) + 1]};
+    var en = {min: nums2[parseInt((index + _index)/2)], max: nums2[parseInt((index + _index)/2) + 1]};
     console.log("+++++++++++++++++++++++++++++++++++++++++++++++++++");
-    while (true) {
-        em = {min: nums1[parseInt((indextmp + _indextmp)/2)], max: nums1[parseInt((indextmp + _indextmp)/2) + 1]};
-        en = {min: nums2[parseInt((index + _index)/2)], max: nums2[parseInt((index + _index)/2) + 1]};
-
+    let times = 10;
+    while (true && times-- > 0) {
         console.log({ em, mi: {indextmp, _indextmp, mN: parseInt((indextmp + _indextmp)/2)}, en, ni: {index, _index, nN: parseInt((index + _index)/2)} });
         if (em.max >= en.min && en.max >= em.min) {
             if ((m + n) % 2 == 0) {
@@ -63,7 +84,11 @@ function run(nums1, nums2) {
            indextmp = parseInt((indextmp + _indextmp)/2);
            _index  = parseInt((index + _index)/2);
         }
+
+        em = {min: nums1[parseInt((indextmp + _indextmp)/2)], max: nums1[parseInt((indextmp + _indextmp)/2) + 1]};
+        en = {min: nums2[parseInt((index + _index)/2)], max: nums2[parseInt((index + _index)/2) + 1]};
     };
+
     function getM(arr1, arr2) {
         let l1 = arr1.length,
             l2 = arr2.length;
